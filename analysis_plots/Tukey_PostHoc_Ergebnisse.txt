@@ -1,0 +1,59 @@
+================================================================================
+TUKEY-HSD POST-HOC ANALYSE ERGEBNISSE
+Paarweise Vergleiche der Model_Name Gruppen
+================================================================================
+
+DATENSATZ INFORMATION:
+----------------------------------------
+Gesamtanzahl Beobachtungen: 511
+Anzahl Modellgruppen: 7
+Anzahl möglicher Paarvergleiche: 21
+
+GRUPPENMITTELWERTE:
+----------------------------------------
+M_Base: 0.283775
+M_C_UP: 0.277692
+M_K_DO: 0.259707
+M_GT: 0.254996
+M_DRO: 0.248758
+M_K_UP: 0.248139
+M_C_DO: 0.231153
+
+VOLLSTÄNDIGE TUKEY-HSD ERGEBNISSE:
+----------------------------------------
+Multiple Comparison of Means - Tukey HSD, FWER=0.05
+===================================================
+group1 group2 meandiff p-adj   lower  upper  reject
+---------------------------------------------------
+M_Base M_C_DO  -0.0526 0.0595 -0.1064 0.0011  False
+M_Base M_C_UP  -0.0061 0.9999 -0.0598 0.0477  False
+M_Base  M_DRO   -0.035 0.4622 -0.0888 0.0187  False
+M_Base   M_GT  -0.0288  0.692 -0.0825  0.025  False
+M_Base M_K_DO  -0.0241 0.8397 -0.0778 0.0297  False
+M_Base M_K_UP  -0.0356 0.4398 -0.0894 0.0181  False
+M_C_DO M_C_UP   0.0465 0.1396 -0.0072 0.1003  False
+M_C_DO  M_DRO   0.0176 0.9603 -0.0361 0.0713  False
+M_C_DO   M_GT   0.0238 0.8457 -0.0299 0.0776  False
+M_C_DO M_K_DO   0.0286 0.6999 -0.0252 0.0823  False
+M_C_DO M_K_UP    0.017 0.9666 -0.0368 0.0707  False
+M_C_UP  M_DRO  -0.0289 0.6865 -0.0827 0.0248  False
+M_C_UP   M_GT  -0.0227  0.874 -0.0764  0.031  False
+M_C_UP M_K_DO   -0.018 0.9559 -0.0717 0.0358  False
+M_C_UP M_K_UP  -0.0296 0.6644 -0.0833 0.0242  False
+ M_DRO   M_GT   0.0062 0.9999 -0.0475   0.06  False
+ M_DRO M_K_DO   0.0109 0.9967 -0.0428 0.0647  False
+ M_DRO M_K_UP  -0.0006    1.0 -0.0544 0.0531  False
+  M_GT M_K_DO   0.0047    1.0  -0.049 0.0585  False
+  M_GT M_K_UP  -0.0069 0.9998 -0.0606 0.0469  False
+M_K_DO M_K_UP  -0.0116 0.9955 -0.0653 0.0422  False
+---------------------------------------------------
+
+SIGNIFIKANTE PAARVERGLEICHE (p-adj < 0.05):
+----------------------------------------
+Keine signifikanten Paarvergleiche gefunden.
+
+ZUSAMMENFASSUNG:
+----------------------------------------
+Anzahl signifikanter Vergleiche: 0 von 21
+
+Analyse durchgeführt am: 2025-08-21 12:04:26

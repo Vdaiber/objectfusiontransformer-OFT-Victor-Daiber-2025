@@ -1,0 +1,128 @@
+================================================================================
+METHODIKPART - STICHPUNKTE FÜR MASTERARBEIT
+Statistische Analyse: Mixed-Effects Linear Model
+================================================================================
+
+EXPERIMENTDESIGN UND DATENSTRUKTUR:
+-----------------------------------
+• Randomized Complete Block Design (RCBD) / Repeated Measures Design
+  - Jeder Proband (n=73) wurde mit allen 7 Modellvarianten getestet
+  - Balanced Design: Gleiche Anzahl Messungen pro Proband und Modell
+  - Abhängige Variable: NDS (kontinuierlich, metrisch skaliert)
+
+• ANOVA-Terminologie:
+  - Two-Way ANOVA mit Blöcken
+  - Faktor A (Treatment): Model_Name (Fixed Factor, 7 Stufen)
+  - Faktor B (Blöcke): Nr (Random Factor, 73 Stufen)
+  - Jeder Block (Proband) enthält alle Treatments (Modelle)
+
+• Mixed-Effects Terminologie:
+  - Fixed Effects: Model_Name (7 Stufen: M_Base, M_GT, M_C_DO, M_C_UP, M_K_DO, M_K_UP, M_DRO)
+  - Random Effects: Nr (Probanden-ID, 73 Stufen)
+  - Referenzgruppe: M_Base (automatisch gewählt, im Intercept enthalten)
+
+METHODENWAHL UND BEGRÜNDUNG:
+---------------------------
+• Mixed-Effects Linear Model (Gemischtes lineares Modell)
+  - Berücksichtigt sowohl Fixed Effects als auch Random Effects
+  - Kontrolliert für individuelle Unterschiede zwischen Probanden
+  - Geeignet für hierarchische/geschachtelte Datenstrukturen
+
+• Warum nicht einfache ANOVA:
+  - Verletzt Unabhängigkeitsannahme (Messwiederholungen)
+  - Ignoriert Korrelation innerhalb der Probanden
+  - Führt zu verzerrten Standardfehlern und p-Werten
+
+• Warum Mixed-Effects Model optimal:
+  - Modelliert Korrelationsstruktur explizit
+  - Trennt Between-Subject und Within-Subject Varianz
+  - Robuste Schätzung der Fixed Effects
+  - Berücksichtigt fehlende Werte (falls vorhanden)
+  - Äquivalent zu Two-Way ANOVA mit Random Blocks
+  - Kontrolliert für individuelle Probandenunterschiede
+
+MODELLSPEZIFIKATION:
+-------------------
+• Mathematische Formulierung:
+  NDS_ij = β₀ + β₁X₁ᵢⱼ + β₂X₂ᵢⱼ + ... + β₆X₆ᵢⱼ + u₀ⱼ + εᵢⱼ
+  
+  Wobei:
+  - i = Beobachtung, j = Proband
+  - β₀ = Intercept (M_Base Mittelwert)
+  - β₁...β₆ = Fixed Effects (Modellunterschiede zu M_Base)
+  - u₀ⱼ = Random Intercept für Proband j
+  - εᵢⱼ = Residualfehler
+
+• R-Syntax Äquivalent: NDS ~ Model_Name + (1|Nr)
+• Python statsmodels: mixedlm("NDS ~ C(Model_Name)", groups="Nr")
+
+STATISTISCHE ANNAHMEN:
+---------------------
+• Normalverteilung der Residuen
+• Homoskedastizität (konstante Varianz)
+• Unabhängigkeit der Random Effects
+• Linearität der Beziehungen
+
+SCHÄTZMETHODE:
+-------------
+• REML (Restricted Maximum Likelihood)
+  - Unverzerrte Schätzung der Varianzkomponenten
+  - Standard für Mixed-Effects Modelle
+  - Berücksichtigt Verlust von Freiheitsgraden durch Fixed Effects
+
+HYPOTHESEN:
+----------
+• H₀: Alle Modelle haben gleiche mittlere NDS-Scores
+  (β₁ = β₂ = β₃ = β₄ = β₅ = β₆ = 0)
+• H₁: Mindestens ein Modell unterscheidet sich signifikant
+  (mindestens ein βᵢ ≠ 0)
+
+SIGNIFIKANZNIVEAU:
+-----------------
+• α = 0.05 (5% Irrtumswahrscheinlichkeit)
+• Zweiseitige Tests für alle Koeffizienten
+
+INTERPRETATIONSANSATZ:
+---------------------
+• Referenzkategorie: M_Base (Baseline-Modell, im Intercept enthalten)
+• Intercept: Mittelwert von M_Base (0.284)
+• Koeffizienten: Mittlere Differenz zu M_Base
+  - Beispiel: M_C_DO = Intercept + Koeffizient = 0.284 + (-0.053) = 0.231
+• P-Werte: Signifikanz der einzelnen Modellunterschiede
+• Konfidenzintervalle: Unsicherheit der Schätzungen
+• Block-Effekte: Individuelle Probandenunterschiede (nicht interpretiert)
+
+SOFTWARE UND IMPLEMENTIERUNG:
+----------------------------
+• Python 3.9
+• Bibliotheken:
+  - pandas (Datenmanipulation)
+  - statsmodels (Mixed-Effects Modelling)
+  - numpy (numerische Berechnungen)
+
+VORTEILE DES GEWÄHLTEN ANSATZES:
+-------------------------------
+• Wissenschaftlich etablierte Methode
+• Berücksichtigt Datenstruktur angemessen
+• Robuste statistische Inferenz
+• Interpretierbare Ergebnisse
+• Vergleichbar mit ANOVA-Tradition
+
+LIMITATIONEN:
+------------
+• Annahme der Normalverteilung
+• Balanced Design erforderlich für optimale Eigenschaften
+• Komplexere Interpretation als einfache ANOVA
+• Erfordert ausreichende Stichprobengröße pro Gruppe
+
+QUALITÄTSSICHERUNG:
+------------------
+• Vollständige Dokumentation des Analysecodes
+• Reproduzierbare Ergebnisse durch Skript-basierte Analyse
+• Automatisierte Ausgabe aller relevanten Statistiken
+• Systematische Überprüfung der Modellannahmen
+
+================================================================================
+Hinweis: Diese Stichpunkte können als Grundlage für die Ausformulierung 
+des Methodikteils der Masterarbeit verwendet werden.
+================================================================================

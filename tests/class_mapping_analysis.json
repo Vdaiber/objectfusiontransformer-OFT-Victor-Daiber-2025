@@ -1,0 +1,33 @@
+{
+  "gt_classes": {
+    "human.pedestrian.adult": 4,
+    "vehicle.truck": 4,
+    "vehicle.trailer": 5,
+    "vehicle.car": 1
+  },
+  "visible_pred_classes": {
+    "pedestrian": 3,
+    "truck": 3,
+    "trailer": 4,
+    "car": 1
+  },
+  "invisible_pred_classes": {
+    "car": 11,
+    "truck": 4,
+    "trailer": 3,
+    "bicycle": 1,
+    "bus": 1
+  },
+  "potential_mappings": {
+    "pedestrian": "human.pedestrian.adult",
+    "car": "vehicle.car",
+    "truck": "vehicle.truck",
+    "trailer": "vehicle.trailer",
+    "bicycle": "vehicle.bicycle",
+    "bus": "vehicle.bus"
+  },
+  "current_visible": 11,
+  "gt_target": 14,
+  "potential_with_mapping": 13,
+  "expected_improvement": 2
+}

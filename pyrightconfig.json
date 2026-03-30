@@ -1,0 +1,8 @@
+{
+    "typeCheckingMode": "off",
+    "include": ["src"],
+    "exclude": ["**/__pycache__/**", "output", ".venv"],
+    "reportOptionalMemberAccess": false,
+    "reportGeneralTypeIssues": false,
+    "reportOptionalSubscript": false
+  }

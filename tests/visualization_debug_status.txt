@@ -1,0 +1,35 @@
+==============================
+Visualisierung & Debugging: Statusbericht
+==============================
+
+1. PROBLEMSTELLUNG
+------------------
+- Die Visualisierung der Predicted-Boxen zeigt Boxen, die im Bild falsch liegen (falsche Orientierung, Position, ggf. 90°-Drehung).
+- Es gibt zu viele Boxen pro Frame, Filter (Keep/Ignore) scheint nicht zu greifen.
+- Ziel: Nur die korrekten (Keep-)Boxen im Kamerabild anzeigen, mit korrekter Transformation und Orientierung.
+
+2. AKTUELLER STAND DER DEBUG-AUSGABEN
+--------------------------------------
+- Ein Debug-Skript prüft Transformationen und (De-)Normalisierung mit künstlichen Boxen. Ergebnis: Transformationen und Normalisierung sind mathematisch korrekt.
+- Systematische Tests mit verschiedenen Positionen und Yaw-Werten zeigen keine Fehler in der mathematischen Pipeline.
+- In der Visualisierungspipeline wurden Debug-Ausgaben eingebaut, die die geladenen Predicted-Boxen, deren Transformationen und Filterstatus (Keep/Ignore) anzeigen.
+- predictions.json enthält nach aktuellem Stand nur "Keep"-Boxen, da der Filter (Score, Label) bereits im Postprocessing greift. Es gibt kein explizites Feld für Ignore/Duplicate in predictions.json.
+
+3. OFFENE FRAGEN / PROBLEME
+---------------------------
+- Warum sind die Boxen im Bild trotzdem falsch gedreht oder falsch positioniert? (Vermutung: Fehler in der Welt→Kamera-Transformation oder in der Denormalisierung der Modell-Predictions)
+- Ist der Keep/Ignore-Filter im Modell/Decoder scharf genug? (Debug-Ausgabe im Training/Eval-Loop geplant: Wie viele Boxen werden als Keep/Ignore klassifiziert?)
+- Sind die Transformationen für echte GT-Boxen und Predicted-Boxen identisch implementiert?
+
+4. NÄCHSTE SCHRITTE
+-------------------
+- Debug-Ausgabe im Training/Eval-Loop: Wie viele Boxen pro Batch werden als Keep/Ignore klassifiziert?
+- In der Visualisierung: Für jede Box die gesamte Transformationskette (center_world, center_ego, center_cam, Yaw) ausgeben, um Fehlerquellen zu identifizieren.
+- Optional: predictions.json temporär um ein Feld "is_keep" erweitern, falls weitere Filterung/Analyse nötig ist.
+- Ziel: Systematisch eingrenzen, ob der Fehler in der Modell-Prediction, der Denormalisierung oder der Transformation zur Kamera liegt.
+
+5. ZUSAMMENFASSUNG
+------------------
+- Die mathematische Pipeline (Transformation, Normalisierung) ist für künstliche Boxen korrekt.
+- predictions.json enthält nach aktuellem Stand nur "Keep"-Boxen.
+- Die Ursache für falsch liegende Boxen im Bild ist noch nicht abschließend geklärt; Debug-Ausgaben und gezielte Vergleiche sind der nächste Schritt. 

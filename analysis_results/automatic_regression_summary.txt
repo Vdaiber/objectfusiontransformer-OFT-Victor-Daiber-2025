@@ -1,0 +1,52 @@
+AUTOMATISCHE REGRESSIONSANALYSE - ERGEBNISSE
+============================================================
+
+Beste Methode: Backward
+Anzahl ausgewählte Features: 38
+R² = 0.9929
+Adjustiertes R² = 0.9849
+F-Statistik = 124.6461
+p-Wert = 1.27e-27
+AIC = -384.79
+BIC = -295.46
+
+AUSGEWÄHLTE FEATURES:
+------------------------------
+ 1. lid_pos
+ 2. lid_pos³
+ 3. lid_drop
+ 4. lid_yaw
+ 5. lid_yaw³
+ 6. cam_dim³
+ 7. lid_dim³
+ 8. lid_dim
+ 9. FP²
+10. cam_dim
+11. cam_yaw²
+12. ra_at³
+13. ra_at
+14. ra_vel²
+15. ra_yaw
+16. ra_drop²
+17. ra_yaw³
+18. ra_pos³
+19. ra_clas³
+20. ra_clas
+21. cam_clas
+22. lid_at²
+23. cam_pos
+24. cam_at
+25. lid_vel²
+26. cam_yaw³
+27. cam_pos²
+28. cam_at²
+29. ra_vel
+30. lid_clas²
+31. cam_dim²
+32. cam_at³
+33. cam_drop
+34. cam_yaw
+35. cam_clas²
+36. lid_vel
+37. cam_drop³
+38. lid_drop²

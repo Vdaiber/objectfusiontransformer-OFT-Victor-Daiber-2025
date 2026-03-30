@@ -1,0 +1,47 @@
+# GPU-optimized Dockerfile for training on GPU-Server
+FROM python:3.9
+
+# Set working directory
+WORKDIR /app
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# EXAKT WIE IM LOKALEN DOCKERFILE
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libjpeg-dev \
+    libpng-dev \
+    libgeos-dev \
+    gcc \
+    python3-dev \
+    rsync \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+
+# EXAKT WIE LOKAL
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# EXAKT WIE LOKAL
+COPY src/ src/
+COPY config/ config/
+
+# EXAKT WIE LOKAL
+ENV PYTHONPATH=/app/src
+
+# Create output directory
+RUN mkdir -p /app/output
+
+# Set CUDA environment variables (will be overridden by runtime)
+ENV CUDA_VISIBLE_DEVICES=1
+ENV NVIDIA_VISIBLE_DEVICES=1
+
+# Default command
+CMD ["python", "src/oft/transformer/run_training_autoregressive.py", "--config-name=pipeline_gpu_server"]

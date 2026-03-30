@@ -1,0 +1,117 @@
+# config/pipeline_real_sensors.yaml
+# Konfigurationsdatei für die Pipeline mit ECHTEN Sensordaten.
+
+hydra:
+  run:
+    dir: output/${now:%Y-%m-%d}/${now:%H-%M-%S}_real_sensors
+  sweep:
+    dir: output/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}_real_sensors
+    subdir: ${hydra.job.num}
+
+# 1. Dataset-Konfiguration
+dataset:
+  dataroot: /data
+  version: v1.0-mini
+  history_window_transformer: 0 # Historie wird in dieser Version nicht verwendet
+  eval_split: "mini_val"
+  cutoff_dist: 150.0
+  norm_stats_path: "/app/src/oft/transformer/utils/norm_stats.json"
+
+  # KORRIGIERTE PFADE: Zeigen auf die gefilterten Mini-Dateien im neuen Ordner
+  real_sensor_paths:
+    lidar: "/app/preprocessed_data/centerpoint_mini.json"
+    radar: "/app/preprocessed_data/radargnn_mini.json"
+    camera: "/app/preprocessed_data/petr_mini.json"
+
+  class_names:
+    - "car"
+    - "truck"
+    - "bus"
+    - "trailer"
+    - "other_vehicle"
+    - "pedestrian"
+    - "motorcycle"
+    - "bicycle"
+    - "traffic_cone"
+    - "barrier"
+    - "animal"
+    - "traffic_sign"
+
+# 2. Modell-Konfiguration
+model:
+  d_model: 300
+  nhead: 2
+  dropout: 0.1
+  activation: "relu"
+  center_offset_scale: 5.0
+  # Dimensionalität der Eingabe-Features pro Objekt:
+  # 3 (xyz normiert) + 4 (w,l,h,yaw) + 3 (one-hot sensor) + 3 (leer, für zukünftige Features)
+  # WICHTIG: Das letzte Feature wird nun für den 'score' verwendet.
+  num_input_features: 13
+  num_encoder_layers: 1
+  dim_feedforward_encoder: 1024
+  pe_max_coord_val: 150.0
+  num_decoder_layers: 1
+  dim_feedforward_decoder: 1024
+  num_queries: 100
+  num_classes: 12
+  box_dim: 7
+
+# 3. Verlustfunktion
+loss:
+  classification_loss: "FocalLoss"
+  focal_loss_alpha: 0.25
+  focal_loss_gamma: 2.0
+  cost_class_weight: 2.0
+  cost_bbox_l1_offset_weight: 5.0
+  cost_giou_bev_weight: 2.0
+  eos_coefficient: 0.1
+  losses_to_compute: ["labels", "boxes_l1_offset", "giou_bev"]
+  loss_weight_dict:
+    loss_ce: 2.0
+    loss_bbox_l1_offset: 5.0
+    loss_giou: 2.0
+
+# 4. Trainingseinstellungen
+training:
+  epochs: 1
+  batch_size: 2
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  lr_drop_epoch: 40
+  lr_scheduler_gamma: 0.1
+  clip_max_norm: 0.1
+  num_workers: 0
+  device: "cpu"
+  seed: 42
+  checkpoint_dir: "output/checkpoints_real_sensors"
+  save_every_k_epochs: 5
+  print_freq: 5
+  train_split_name: "mini_train"
+  val_split_name: "mini_val"
+  use_dataparallel: false
+  sample_idx_for_vis: 12
+
+# 5. Visualisierungseinstellungen
+visualization:
+  camera_channel: "CAMERA_LEFT_FRONT"
+  output_dir: "output/visualizations_real_sensors"
+  sample_idx: 12
+  score_threshold: 0.3
+  draw_elements:
+    ground_truth: true
+    fused_prediction: true
+    sensor_inputs: true
+    sensor_inputs_to_draw: []
+
+# 6. Evaluationseinstellungen
+evaluation:
+  run_devkit_eval: true
+  eval_config_name: "detection_cvpr_2024"
+  eval_split_name: "mini_val"
+  eval_detection_cfg:
+    dist_fcn: "center_distance"
+    dist_ths: [0.5, 1.0, 2.0, 4.0]
+    iou_ths_bev: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    conf_th_eval: 0.1
+    max_boxes_per_sample: 100

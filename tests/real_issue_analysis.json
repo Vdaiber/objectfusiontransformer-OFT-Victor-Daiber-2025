@@ -1,0 +1,39 @@
+{
+  "gt_boxes": 14,
+  "total_predictions": 31,
+  "visible_predictions": 11,
+  "gap": 3,
+  "visible_classes": {
+    "pedestrian": 3,
+    "truck": 3,
+    "trailer": 4,
+    "car": 1
+  },
+  "invisible_classes": {
+    "car": 11,
+    "truck": 4,
+    "trailer": 3,
+    "bicycle": 1,
+    "bus": 1
+  },
+  "gt_classes": {
+    "human.pedestrian.adult": 4,
+    "vehicle.truck": 4,
+    "vehicle.trailer": 5,
+    "vehicle.car": 1
+  },
+  "missing_classes": [
+    "human.pedestrian.adult",
+    "vehicle.car",
+    "vehicle.truck",
+    "vehicle.trailer"
+  ],
+  "extra_classes": [
+    "bicycle",
+    "pedestrian",
+    "trailer",
+    "car",
+    "truck",
+    "bus"
+  ]
+}

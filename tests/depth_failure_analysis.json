@@ -1,0 +1,588 @@
+{
+  "total_boxes": 31,
+  "depth_failures": 20,
+  "depth_passes": 11,
+  "failure_by_class": {
+    "car": [
+      {
+        "index": 0,
+        "name": "car",
+        "score": 0.7595810890197754,
+        "center": [
+          9.704384474100179,
+          1.4982691689080723,
+          -8.910099561300353
+        ],
+        "depth_range": [
+          -10.22571972801327,
+          -7.5944793945874345
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          101.98680342053325,
+          414.8902067287265
+        ],
+        "projection_v_range": [
+          325.96964594121,
+          476.558069046094
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 8,
+        "name": "car",
+        "score": 0.8420844674110413,
+        "center": [
+          -2.587031116802478,
+          1.2356749055019771,
+          -22.22873566827999
+        ],
+        "depth_range": [
+          -23.376005729943266,
+          -21.081465606616717
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          970.0245688291816,
+          1098.385867391463
+        ],
+        "projection_v_range": [
+          454.2155023235955,
+          512.486720460515
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 12,
+        "name": "car",
+        "score": 0.7791885137557983,
+        "center": [
+          7.598092689097062,
+          1.4503184589370237,
+          -11.182604571691577
+        ],
+        "depth_range": [
+          -12.623718390002045,
+          -9.74149075338111
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          386.6044702229846,
+          654.6293836960114
+        ],
+        "projection_v_range": [
+          374.51926407287675,
+          485.2076852444607
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 17,
+        "name": "car",
+        "score": 0.7847646474838257,
+        "center": [
+          -0.4352118968957401,
+          1.8275385098617885,
+          -20.122414080561676
+        ],
+        "depth_range": [
+          -21.59175342098423,
+          -18.65307474013912
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          903.7014698176964,
+          1041.8204939827092
+        ],
+        "projection_v_range": [
+          427.0413088813707,
+          491.9668955253289
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 19,
+        "name": "car",
+        "score": 0.7958964705467224,
+        "center": [
+          11.49369673288785,
+          1.4759123447838918,
+          -6.850513429346172
+        ],
+        "depth_range": [
+          -7.965411583903558,
+          -5.7356152747887865
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -362.9514015173453,
+          102.31994842765413
+        ],
+        "projection_v_range": [
+          267.14719964005513,
+          464.89909119163525
+        ],
+        "pixels_in_image": 2,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 20,
+        "name": "car",
+        "score": 0.8139406442642212,
+        "center": [
+          12.264502780896771,
+          1.540095525030192,
+          -4.674258634529713
+        ],
+        "depth_range": [
+          -5.963414322216154,
+          -3.385102946843272
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -1485.926973844031,
+          -229.38231286345274
+        ],
+        "projection_v_range": [
+          87.65128974118468,
+          434.85123262591975
+        ],
+        "pixels_in_image": 0,
+        "total_corners": 8,
+        "visibility_pass": false,
+        "overall_pass": false
+      },
+      {
+        "index": 21,
+        "name": "car",
+        "score": 0.7863722443580627,
+        "center": [
+          -4.348880607568343,
+          1.3660555296834007,
+          -24.454821550575222
+        ],
+        "depth_range": [
+          -25.84877861499021,
+          -23.060864486160234
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          1019.596821970741,
+          1126.5754451287485
+        ],
+        "projection_v_range": [
+          460.4553469158434,
+          505.9531392513355
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 22,
+        "name": "car",
+        "score": 0.8134008646011353,
+        "center": [
+          5.449085651331992,
+          1.4036689567238845,
+          -13.398585143160815
+        ],
+        "depth_range": [
+          -14.771772358041469,
+          -12.025397928280162
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          582.1285818101599,
+          812.938547955834
+        ],
+        "projection_v_range": [
+          401.29356923800503,
+          495.00610020931185
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 23,
+        "name": "car",
+        "score": 0.7852019667625427,
+        "center": [
+          3.520958462914707,
+          1.4826469234481205,
+          -15.542516263819921
+        ],
+        "depth_range": [
+          -17.11354274507596,
+          -13.971489782563882
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          711.8839374907767,
+          916.7717433599875
+        ],
+        "projection_v_range": [
+          413.86019336884425,
+          495.7585647622576
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 25,
+        "name": "car",
+        "score": 0.8051228523254395,
+        "center": [
+          1.6495826208768505,
+          1.3877299862899561,
+          -18.1498503394554
+        ],
+        "depth_range": [
+          -19.613424940332287,
+          -16.686275738578516
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          820.0715073963742,
+          981.1361184284292
+        ],
+        "projection_v_range": [
+          437.2126218233828,
+          499.993784820514
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 29,
+        "name": "car",
+        "score": 0.8249680995941162,
+        "center": [
+          14.85792415667854,
+          1.4953235027164737,
+          -2.602403126795736
+        ],
+        "depth_range": [
+          -3.706150405014535,
+          -1.4986558485769368
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -4440.112734092367,
+          -1627.6078358040447
+        ],
+        "projection_v_range": [
+          -461.72859161087297,
+          400.53890437225357
+        ],
+        "pixels_in_image": 0,
+        "total_corners": 8,
+        "visibility_pass": false,
+        "overall_pass": false
+      }
+    ],
+    "truck": [
+      {
+        "index": 6,
+        "name": "truck",
+        "score": 0.5180370807647705,
+        "center": [
+          8.041763640600207,
+          2.1565030654229793,
+          -28.104476522696192
+        ],
+        "depth_range": [
+          -31.265367796795246,
+          -24.943585248597138
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          697.1235710002525,
+          845.5734818979744
+        ],
+        "projection_v_range": [
+          450.51158051781556,
+          487.15107862244497
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 11,
+        "name": "truck",
+        "score": 0.8612594604492188,
+        "center": [
+          29.06866424171537,
+          0.6686818282727298,
+          -0.3177032535054432
+        ],
+        "depth_range": [
+          -2.5513822802194226,
+          1.9159757732085363
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -25719.220028329677,
+          1903607.078395109
+        ],
+        "projection_v_range": [
+          -63926.23918456207,
+          14227.528957807453
+        ],
+        "pixels_in_image": 0,
+        "total_corners": 8,
+        "visibility_pass": false,
+        "overall_pass": false
+      },
+      {
+        "index": 15,
+        "name": "truck",
+        "score": 0.855613112449646,
+        "center": [
+          -9.98605210997021,
+          -0.13670700282250947,
+          1.7388130968769007
+        ],
+        "depth_range": [
+          -0.5459722935627975,
+          4.023598487316599
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -1097.5168731589715,
+          84027.4218521041
+        ],
+        "projection_v_range": [
+          -13049.259365726552,
+          7255.44848012992
+        ],
+        "pixels_in_image": 0,
+        "total_corners": 8,
+        "visibility_pass": false,
+        "overall_pass": false
+      },
+      {
+        "index": 28,
+        "name": "truck",
+        "score": 0.8872165679931641,
+        "center": [
+          11.376972346668413,
+          0.7046544269620724,
+          -23.40106554800373
+        ],
+        "depth_range": [
+          -25.723217020749964,
+          -21.078914075257494
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          574.6625631206209,
+          714.8611949597985
+        ],
+        "projection_v_range": [
+          464.0841354561479,
+          537.2733205671516
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      }
+    ],
+    "trailer": [
+      {
+        "index": 10,
+        "name": "trailer",
+        "score": 0.9782797694206238,
+        "center": [
+          -2.1410043565277554,
+          1.6295838077046312,
+          -10.441671820225137
+        ],
+        "depth_range": [
+          -13.936048413430562,
+          -6.947295227019711
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          923.0924825910679,
+          1194.6293424366258
+        ],
+        "projection_v_range": [
+          308.93656520866847,
+          475.5435470401603
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      },
+      {
+        "index": 14,
+        "name": "trailer",
+        "score": 0.9707976579666138,
+        "center": [
+          24.626828136450648,
+          0.7398589795496638,
+          -5.135190653754783
+        ],
+        "depth_range": [
+          -9.432641131870625,
+          -0.8377401756389427
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -18959.450334150544,
+          -612.7319618860946
+        ],
+        "projection_v_range": [
+          -1223.9701788770985,
+          1268.0586969655321
+        ],
+        "pixels_in_image": 0,
+        "total_corners": 8,
+        "visibility_pass": false,
+        "overall_pass": false
+      },
+      {
+        "index": 30,
+        "name": "trailer",
+        "score": 0.9568235874176025,
+        "center": [
+          -9.856746892337316,
+          1.29503769306193,
+          -4.5228466155943705
+        ],
+        "depth_range": [
+          -9.360276995715456,
+          0.31458376452671555
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -219264.43536960785,
+          1665.30120373231
+        ],
+        "projection_v_range": [
+          370.7890677562535,
+          16861.143705938033
+        ],
+        "pixels_in_image": 4,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      }
+    ],
+    "bicycle": [
+      {
+        "index": 13,
+        "name": "bicycle",
+        "score": 0.4591967463493347,
+        "center": [
+          -16.61760691848545,
+          1.4790019874933433,
+          -19.19598753419921
+        ],
+        "depth_range": [
+          -20.148806636621977,
+          -18.243168431776446
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          1476.2001512802642,
+          1550.1911228413326
+        ],
+        "projection_v_range": [
+          448.7780355991329,
+          491.1883359750889
+        ],
+        "pixels_in_image": 8,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      }
+    ],
+    "bus": [
+      {
+        "index": 16,
+        "name": "bus",
+        "score": 0.398745596408844,
+        "center": [
+          -6.230326682438385,
+          -0.10910720023942501,
+          0.25918164848576664
+        ],
+        "depth_range": [
+          -3.860703907426116,
+          4.379067204397649
+        ],
+        "depth_pass": false,
+        "projection_u_range": [
+          -339.30731291146867,
+          1989.6226195585878
+        ],
+        "projection_v_range": [
+          212.55021765586477,
+          829.521704133651
+        ],
+        "pixels_in_image": 5,
+        "total_corners": 8,
+        "visibility_pass": true,
+        "overall_pass": false
+      }
+    ]
+  },
+  "coordinate_analysis": {
+    "world_ranges": {
+      "x": [
+        571679.1651308821,
+        571712.3263861885
+      ],
+      "y": [
+        5367845.523519179,
+        5367926.511310813
+      ],
+      "z": [
+        592.7186274699567,
+        596.3589049793032
+      ]
+    },
+    "camera_ranges": {
+      "x": [
+        -16.61760691848545,
+        46.44709277394396
+      ],
+      "y": [
+        -0.5729889798329373,
+        2.1565030654229793
+      ],
+      "z": [
+        -28.104476522696192,
+        33.99187779820497
+      ]
+    },
+    "behind_camera_count": 18
+  }
+}

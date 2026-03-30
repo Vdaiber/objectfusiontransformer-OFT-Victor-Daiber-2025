@@ -1,0 +1,36 @@
+{
+  "analysis": {
+    "camera_translation": [
+      5.218337,
+      1.289023,
+      2.110627
+    ],
+    "camera_rotation": [
+      0.5243729158425541,
+      -0.5347430148556852,
+      0.46913802442248353,
+      -0.46796630993566085
+    ],
+    "camera_forward_in_ego": [
+      0.008476883253704492,
+      -0.9998910881316196,
+      -0.012081155791957066
+    ],
+    "forward_alignment": 0.008476883253704492,
+    "objects_in_front": 7,
+    "objects_behind": 3
+  },
+  "test_alternatives": {
+    "original": {},
+    "invert_camera_rotation": {
+      "invert_camera": true
+    },
+    "flip_z_axis": {
+      "flip_z": true
+    },
+    "both_fixes": {
+      "invert_camera": true,
+      "flip_z": true
+    }
+  }
+}

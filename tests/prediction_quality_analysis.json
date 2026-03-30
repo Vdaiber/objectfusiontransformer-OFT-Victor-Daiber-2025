@@ -1,0 +1,42 @@
+{
+  "gt_boxes": 14,
+  "total_predictions": 31,
+  "visible_predictions": 6,
+  "gt_classes": {
+    "human.pedestrian.adult": 4,
+    "vehicle.truck": 4,
+    "vehicle.trailer": 5,
+    "vehicle.car": 1
+  },
+  "pred_classes": {
+    "car": 12,
+    "pedestrian": 3,
+    "truck": 7,
+    "trailer": 7,
+    "bicycle": 1,
+    "bus": 1
+  },
+  "visible_pred_classes": {
+    "car": 4,
+    "truck": 1,
+    "trailer": 1
+  },
+  "gt_distance_range": [
+    2.968937984007114,
+    46.622837588071114
+  ],
+  "pred_distance_range": [
+    0.4484585707853211,
+    39.03788718574896
+  ],
+  "score_stats": {
+    "range": [
+      0.398745596408844,
+      0.9902610182762146
+    ],
+    "mean": 0.8399511344971196,
+    "high_conf": 22,
+    "medium_conf": 7,
+    "low_conf": 2
+  }
+}

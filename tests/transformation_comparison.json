@@ -1,0 +1,22 @@
+{
+  "ORIGINAL (.inverse)": {
+    "total_boxes": 31,
+    "custom_fov_visible": 11,
+    "devkit_visible": 11,
+    "behind_camera": 20,
+    "depth_range": [
+      -31.265367796795246,
+      32.89636816557136
+    ]
+  },
+  "FIXED (no .inverse)": {
+    "total_boxes": 31,
+    "custom_fov_visible": 6,
+    "devkit_visible": 6,
+    "behind_camera": 11,
+    "depth_range": [
+      -15.75671891472408,
+      40.41670252722531
+    ]
+  }
+}

@@ -1,0 +1,355 @@
+# config/pipeline_staged.yaml
+
+# Hydra experiment management configuration
+hydra:
+  run:
+    dir: /data/daiber_fent/output/full_dataset_runs/${now:%Y-%m-%d}/${now:%H-%M-%S} # FIXED: HDD Location für bessere Speicherung
+  sweep:
+    dir: /data/daiber_fent/output/staged_multirun/${now:%Y-%m-%d}/${now:%H-%M-%S} # Output directory for multi-run (hyperparameter sweep) experiments
+    subdir: ${hydra.job.num} # Unique subdirectory for each job within a sweep
+
+# Dataset configuration
+dataset:
+  dataroot: /data # Filesystem path to the root of the TruckScenes dataset
+  version:  v1.0-trainval # PRODUCTION: Full dataset for realistic sensor tuning
+
+  eval_split: "val" # PRODUCTION: Full validation split
+
+  cutoff_dist: 150.0 # Maximum distance for considering detections (meters)
+  normalization_stats_path: "config/normalization_stats.yaml" # Path to normalization statistics
+
+  # Scene-dependent noise conditioning
+  scene_conditioning:
+    enabled: true  # Enable/disable scene-dependent noise conditioning
+    config_path: "config/scene_conditioning_config.yaml"  # Path to scene conditioning configuration
+
+  # Class definitions
+  class_names:
+    - "car" # Passenger vehicle
+    - "truck" # Commercial truck
+    - "bus" # Public transport bus
+    - "trailer" # Trailer unit
+    - "other_vehicle" # Miscellaneous vehicle
+    - "pedestrian" # Pedestrian
+    - "motorcycle" # Motorized two-wheeler
+    - "bicycle" # Non-motorized two-wheeler
+    - "traffic_cone" # Traffic control device
+    - "barrier" # Physical barrier
+    - "animal" # Animal present on roadway
+    - "traffic_sign" # Roadside traffic sign
+
+  # Virtual sensor simulation (data augmentation and robustness)
+  simulation:
+    fn_rate: 0.0 # DEACTIVATED: No false negatives
+    num_fps: 1 
+
+    # Range for the spatial position of simulated false positives (in meters)
+    fp_pos_range:
+      x: [-70, 70] # Longitudinal (forward-backward) range
+      y: [-70, 70] # Lateral (left-right) range
+      z: [-2, 2] # Vertical (up-down) range
+
+    # Range for the dimensions of simulated false positives (in meters)
+    fp_dim_range:
+      w: [0.5, 3.5] # Width range
+      l: [0.5, 6.0] # Length range
+      h: [0.5, 3.5] # Height range
+
+    # Range for the velocity of simulated false positives (in m/s)
+    fp_velocity_range:
+      vx: [-10, 10]
+      vy: [-5, 5]
+
+  # Configuration of virtual sensors for multi-modal fusion experiments
+
+  # Parameterbeschreibung:
+  # - pos_noise_std: [X, Y, Z] additive Positionsstörung in Metern (Gaussian)
+  # - dim_noise_std: multiplikative Dimensionsänderung (1.0 ± Faktor)
+  # - yaw_noise_std: additive Orientierung in Radiant (0.02 rad ≈ 1.1°)
+  # - velocity_noise_std: additive Geschwindigkeit in m/s
+  # - dropout_rate: Wahrscheinlichkeit [0.0–1.0] für kompletten Detektionsausfall
+  # - class_accuracy: Wahrscheinlichkeit für korrekte Objektklasse
+  # - attribute_accuracy: Wahrscheinlichkeit für korrekte Objektattribute
+
+  virtual_sensors:
+    - name: "virtual_lidar" # Simulated LiDAR sensor - TARGET: mAP=0.227, NDS=0.354 (ITERATION 8 - FINALE NDS TUNING)
+      enabled: true
+      pos_noise_std: [0.69, 0.69, 0.43]  # MINIMAL: -2% für NDS 0.347→0.354 (weniger ATE/ASE)
+      dim_noise_std: 0.27   # MINIMAL: -4% für bessere Size-Performance 
+      yaw_noise_std: 0.22    # UNVERÄNDERT: AOE bereits gut
+      velocity_noise_std: 0.16   # UNVERÄNDERT: mAVE bereits gut
+      dropout_rate: 0.24  # UNVERÄNDERT: mAP schon über Target
+      class_accuracy: 0.78   # UNVERÄNDERT: Class Performance bereits gut
+      attribute_accuracy: 0.68 # UNVERÄNDERT: Attribute Performance bereits gut
+
+    - name: "virtual_camera" # Simulated camera sensor - TARGET: NDS=0.114 (FINAL CALC)
+      enabled: true
+      pos_noise_std: [1.5, 1.5, 2.7] # INCREASED: Base noise für durchschnittlich schlechtere mAP
+      dim_noise_std: 0.24   # BEIBEHALTEN: Individual errors OK
+      yaw_noise_std: 0.389    # BEIBEHALTEN: Individual errors OK
+      velocity_noise_std: 0.08   # IGNORED: Per user instruction
+      dropout_rate: 0.15  # BEIBEHALTEN: Fusion-Rate sicher
+      class_accuracy: 0.80   # BEIBEHALTEN: Realistic + Fusion-sicher
+      attribute_accuracy: 0.60 # IGNORED: Per user instruction
+
+    - name: "virtual_radar" # Simulated radar sensor - TARGET: NDS=0.101 (FINAL CALC)
+      enabled: true
+      pos_noise_std: [1.05, 1.05, 1.8]  # INCREASED: Base noise für durchschnittlich schlechtere mAP
+      dim_noise_std: 0.395  # BEIBEHALTEN: Individual errors OK
+      yaw_noise_std: 0.877   # BEIBEHALTEN: Individual errors OK
+      velocity_noise_std: 0.012   # IGNORED: Per user instruction
+      dropout_rate: 0.20  # BEIBEHALTEN: Fusion-Rate sicher
+      class_accuracy: 0.70   # BEIBEHALTEN: Realistic + Fusion-sicher
+      attribute_accuracy: 0.70 # IGNORED: Per user instruction
+
+# Model architecture configuration for the transformer-based fusion network
+model:
+  # === CORE DIMENSIONS AND SETTINGS === (CAPACITY UPGRADE!)
+  # Defines the primary feature dimensions used throughout the model.
+  input_feature_dim: 12   # Input: [x, y, z, w, l, h, sin_yaw, cos_yaw, vx, vy, sensor_class, sensor_attr] (all normalized)
+  d_model: 1536           # MASSIVE UPGRADE: 1020→1536 (1536÷12=128, 1536÷6=256, perfekt teilbar!)
+  nhead: 12               # Haupt-Anzahl der Attention-Köpfe für komplexe Fusion
+  dropout: 0.15           # REDUZIERT: 0.2→0.15 (weniger Dropout für mehr Kapazität)
+  activation: "relu"      # Global activation function
+
+  # === ENCODER STAGES (Hierarchical Dimensioning) ===
+  # The model uses a two-stage encoding process with different dimensions for efficiency and performance.
+  # 1. Intra-Modal: Lower dimension for efficient, parallel per-sensor processing.
+  # 2. Inter-Modal: Higher dimension for complex cross-sensor fusion and duplicate suppression.
+
+  intra_modal:
+    d_model: 768          # UPGRADE: 510→768 (768÷6=128, perfekt mit neuem d_model!)
+    nhead: 6              # Weniger Köpfe, da Aufgabe weniger komplex
+    layers: 3             # ERHÖHT: 2→3 (mehr Abstraktions-Layer für bessere Features)
+    ff_dim: 3072          # UPGRADE: 2048→3072 (~4 * neues d_model)
+
+  inter_modal_fusion:
+    d_model: ${model.d_model} # Nutzt die Haupt-Dimension (jetzt 1536!)
+    nhead: ${model.nhead}     # Nutzt die Haupt-Anzahl der Köpfe (12)
+    encoder_depth: 6          # ERHÖHT: 4→6 (tiefere Fusion für komplexere Cross-Sensor Learning)
+    ff_dim: 6144              # UPGRADE: 4096→6144 (~4 * neues d_model)
+    dropout: ${model.dropout}
+
+  metadata_encoder:
+    d_model: ${model.d_model} # Nutzt die Haupt-Dimension (504)
+    nhead: 6                  # Reduzierte Köpfe für einfachere Metadaten
+    config:
+      num_sensors: 3
+      sensor_embed_dim: 32
+      confidence_embed_dim: 4
+      # Scene-level metadata
+      weather:
+        vocab: ["clear", "overcast", "rain", "snow"]
+        embed_dim: 8
+      area:
+        vocab: ["city", "highway", "terminal"]
+        embed_dim: 8
+      daytime:
+        vocab: ["morning", "noon"]
+        embed_dim: 4
+      season:
+        vocab: ["autumn", "summer", "winter"]
+        embed_dim: 8
+      lighting:
+        vocab: ["dark", "illuminated", "other_lighting", "twilight"]
+        embed_dim: 8
+      structure:
+        vocab: ["bridge", "overpass", "regular"]
+        embed_dim: 8
+      construction:
+        vocab: ["roadworks", "unchanged"]
+        embed_dim: 4
+
+      # Unique detection ID for robust anchor-offset mapping
+      detection_id:
+        vocab_size: 50000  # Large enough for unique IDs (hash % vocab_size)
+        embed_dim: 16      # Embedding dimension for the detection ID
+
+  # === TEMPORAL MODEL ===
+  # Manages information flow across time steps.
+  autoregressive:
+    enabled: false                   # Enable autoregressive prediction mode
+    memory_enabled: false            # Enable temporal memory
+    use_ego_motion_compensation: false # Compensate for ego vehicle motion
+
+  temporal_cross_attention:
+    # Fuses current frame features with ego-compensated memory from the past.
+    d_model: ${model.d_model}     # Must match the inter-modal fusion dimension
+    nhead: ${model.nhead}         # Must match the inter-modal fusion heads
+    dropout: ${model.dropout}     # Uses the global dropout rate
+
+  # === DECODER (Output Generation) ===
+  # The decoder uses the final fused features to generate predictions.
+  # It has its own internal projections for each specific task head.
+  decoder:
+    num_classes: 12           # This will be overridden by the model from the dataset config
+    num_attribute_classes: 11 # Number of attribute classes for object properties
+    box_dim: 8                # Bounding box: [x,y,z,w,l,h,sin_yaw,cos_yaw] - 8D with sin/cos yaw representation
+    output_heads:
+      # Each head can have an optimal dimension for its task. (CAPACITY UPGRADE!)
+      classification:
+        d_model: 768          # UPGRADE: 512→768 (mehr Kapazität für komplexe Klassifikation)
+      attributes:
+        d_model: 512          # OPTIMIERT: Zurück zu erfolgreichem Wert (768→512)
+      center_offsets:
+        d_model: 768          # UPGRADE: 512→768 (Center ist kritisch für Box-Refinement!)
+      size_offsets:
+        d_model: 768          # UPGRADE: 512→768 (Size ist sehr wichtig für Boxes!)
+      yaw_offsets:
+        d_model: 768          # UPGRADE: 512→768 (Orientation ist komplex!)
+      velocity:
+        d_model: 512          # BEIBEHALTEN: Velocity ist relativ einfach
+
+# Loss function and matching algorithm configuration
+loss:
+  # Global regression scalar for weighting all regression losses
+  regression_scalar: 1.0  # Global multiplier for all regression losses (center, size, angle, velocity)
+  
+  # Manual class weights for class imbalance handling (MODERATE APPROACH - LESS AGGRESSIVE)
+  manual_class_weights:
+    enabled: true 
+    weights:
+      car: 0.168             # ↑ WENIGER bestraft: 0.5→0.7 (noch reduziert aber fairer)
+      truck: 0.334            
+      bus: 0.705            # = Original (korrekt)
+      trailer: 0.375         # = Original (korrekt)
+      other_vehicle: 0.969   # = Original (korrekt)
+      pedestrian: 0.417      # = Original (korrekt)
+      motorcycle: 2.153      # = Original (korrekt)
+      bicycle: 1.180         # = Original (korrekt) 
+      traffic_cone: 0.481     # = Original (korrekt)
+      barrier: 2.573         # = Original (korrekt)
+      animal: 2.445          # = Original (korrekt)
+      traffic_sign: 0.199    # = Original (korrekt)
+
+  # Classification loss type - valid: 'CrossEntropy', 'WeightedCrossEntropy', 'FocalLoss'
+  classification_loss: 'FocalLoss'  # Anchor-dichtes Setting: Focal stabilisiert harte Negative
+  attribute_loss: 'FocalLoss'      # NEW: Use FocalLoss for attributes as well
+  
+  # Focal Loss parameters 
+  #focal_loss_alpha: 0.25   
+  #focal_loss_gamma: 2.0    #  Focus on hard examples without being too aggressive
+  # Class-specific Focal Loss params (override global if set)
+  focal_loss_alpha_class: 0.25
+  focal_loss_gamma_class: 2.0
+  # Attribute-specific Focal Loss params - MODERATE BALANCE
+  focal_loss_alpha_attr: 0.75    # MITTELWERT: 0.1→0.4 (zwischen 0.1 und 0.75)
+  focal_loss_gamma_attr: 0.5    # MITTELWERT: 3.0→1.5 (zwischen 0.5 und 3.0)
+  class_eos_coefficient: 2.0    # ZURÜCK: 0.5→1.0 (moderater)
+  attribute_eos_coefficient: 0.1  # BEIBEHALTEN: 0.1 (Attributes nicht dominieren lassen)  
+
+  # Cost weights for the Hungarian matching algorithm - MULTI-TASK GEOMETRY AWARE  
+  cost_center: 30.0        # Prioritize robust localization
+  cost_class: 20.0        # Keep class cost stable
+  cost_size: 10.0         # OPTIMIERT: Stärkeres Size Matching wie erfolgreich
+  cost_angle: 12.0        # OPTIMIERT: Stärkeres Angle Matching wie erfolgreich
+  cost_giou_bev: 35.0     # Stronger geometric consistency in BEV
+
+  # Huber loss for regression targets - ANKERBOX-OPTIMIERT
+  huber:
+    delta: 0.01
+
+  iou:
+    use_exact_iou: false
+    description: "Fast mode (AABB) is recommended for training; exact mode (polygon) for evaluation."
+
+  # List of loss functions to compute during training
+  losses_to_compute: [
+    "center",
+    "size", 
+    "angle",
+    "velocity",
+    "class",
+    "attributes"  
+  ]
+  
+  # Weights for each loss component - BALANCED FOR NDS
+  loss_weight_dict:
+    # OPTIMIERT FÜR NDS-MAXIMIERUNG
+    loss_center: 100.0    # ERHÖHT: Stärkere Gewichtung für Positionsgenauigkeit (mATE)
+    loss_size: 40.0       # REDUZIERT: Weniger Dominanz der Größe (mASE)
+    loss_angle: 40.0      # BEIBEHALTEN: Funktioniert gut
+    loss_velocity: 35.0   # BEIBEHALTEN: Funktioniert gut
+    loss_class: 15.0       # ERHÖHT: Finale Anpassung für stabilen Class Head
+    loss_attributes: 0.1  # FINAL: Drastisch reduziert, um NDS-Korrelation zu erzwingen
+
+# Training hyperparameters and optimization settings
+# PREPROCESSING PHASE: CPU-basiert, maximale Geschwindigkeit für großen Datensatz
+preprocessing:
+  # batch_size: ALWAYS 1 (hardcoded) - each sample processed independently
+  num_workers: 8                     # OPTIMAL: 3x Performance-Boost durch Parallelisierung  
+  sampler: "sequential"              # OPTIMAL: Deterministisch und etwas schneller
+  cache_dir: "/data/daiber_fent/virtual_sensor_cache"
+  seed: 42                           # WICHTIG: Identischer Seed für reproduzierbare Virtual Sensor Simulation
+
+
+# Training configuration  
+training:
+  # Training epochs and validation intervals - ARCHITECTURE-UPGRADE PRODUCTION
+  epochs: 8                  # OPTIMIERT: 8 Epochen für maximale Effizienz
+  batch_size: 4               
+  learning_rate: 0.00006      # BEIBEHALTEN: Erfolgreicher Wert
+  class_head_lr_factor: 0.12  # BEIBEHALTEN: Erfolgreicher niedrigerer Wert
+  attribute_head_lr_factor: 0.005  # BEIBEHALTEN: Funktioniert gut
+  seed: 42
+  weight_decay: 0.005       # ERHÖHT: Stärkere Regularisierung gegen Overfitting des neuen Heads
+  lr_drop_epoch: 3          # KORRIGIERT: LR-Drop nach Peak bei Epoche 2
+  lr_scheduler_gamma: 0.5    # KORRIGIERT: Stärkerer Drop (50%) für Overfitting-Kontrolle
+  clip_max_norm: 10.0        # REDUZIERT: Aggressiveres Clipping gegen Gradientenexplosionen
+  # MODULE-SPECIFIC GRADIENT CLIPPING - EXPLOSION PREVENTION
+  module_clip_norms:
+    class_head: 8.0           # ERHÖHT: 5.0→8.0 (zu restrictive war zu langsam)
+    attribute_head: 5.0       # ERHÖHT: 2.0→5.0 (zu restrictive verhinderte Lernen)
+    center_head: 10.0         # GROSS: Center-Head soll lernen
+    size_head: 10.0           # MODERAT: Size-Head kontrollieren
+    yaw_head: 10.0            # SEHR KLEIN: Yaw-Head explodiert extrem
+    velocity_head: 10.0       # MODERAT: Velocity-Head kontrollieren
+    fusion_encoder: 10.0      # GROSS: Fusion-Encoder soll lernen
+    intra_modal_encoders: 10.0 # MODERAT: Intra-Modal stabil
+  num_workers: 4             # Training: Multi-Worker für schnelles Loading
+  pin_memory: true
+  device: "cuda"
+  print_freq: 200             # Training: Häufigere Logs für besseres Monitoring
+  
+  # Early Stopping Configuration - NDS-OPTIMIERT (nicht Loss-optimiert!)
+  early_stopping:
+    enabled: false           # DEAKTIVIERT: NDS ist primäres Ziel, nicht Val Loss
+    patience: 5              # BEREIT: Für spätere Aktivierung
+    min_delta: 0.001         # OPTIMIERT: Zurück zu erfolgreichem Wert
+    restore_best_weights: true # Beste Gewichte wiederherstellen nach dem Stoppen
+    
+  resume: false   
+  checkpoint_path: null  
+  train_split_name: "train"                         # PRODUCTION: Full Dataset Training Split
+  val_split_name: "val"                             # PRODUCTION: Full Dataset Validation Split
+  
+  # Model Archiving Configuration - DoE System Support
+  archive_model: true                              # Optional: Archive best model after training (default: false)
+  model_identifier: "Model_C_UP"                              # Model name for archive (e.g., "model_noisefree", "model_low_noise")                    
+  
+  # RAM CACHE SETTINGS
+  preprocessed_cache_dir: "/data/daiber_fent/virtual_sensor_cache"  # Where to load JSON files from
+  dataset_verbose: false
+  
+  # === TRAINING SAMPLER CONFIGURATION ===
+  # Controls data sampling strategy for training (wenn preprocessed data verfügbar)
+  sampler: "random"                  # Training: Random für bessere Konvergenz
+                                    # "sequential" | "random" | "auto"
+
+# Visualization configuration
+visualization:
+  enabled: true
+  sample_idx: 12
+  camera_channel: "CAMERA_LEFT_FRONT"
+
+# Evaluation configuration
+evaluation:
+  run_devkit_eval: true
+  eval_config_name: "detection_cvpr_2024"
+  eval_split_name: "val"                                # PRODUCTION: Full Validierungsdatensatz
+  conf_th_eval: 0.001                # FIXED: Proper confidence threshold to filter out false positives
+  high_precision_denorm: true      # PRECISION FIX: Force float64 for coordinate denormalization
+  
+  # Baseline evaluation settings
+  run_baseline_evaluation: false   # DEAKTIVIERT: Für schnelleres Training ohne Baseline-Eval
+  baseline_eval_split: "val"                         # DEBUGGING: Mini Validierungsdatensatz

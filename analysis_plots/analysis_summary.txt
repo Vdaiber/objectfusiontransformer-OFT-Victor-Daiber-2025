@@ -1,0 +1,79 @@
+================================================================================
+COMPARATIVE INTERACTION PLOTS ANALYSIS - SUMMARY REPORT
+================================================================================
+
+ANALYSIS OVERVIEW:
+----------------------------------------
+Analysis type: Polynomial regression-based interaction plots
+Number of models analyzed: 7
+Models: M_Base, M_C_DO, M_C_UP, M_DRO, M_GT, M_K_DO, M_K_UP
+Key factors analyzed: lid_pos, lid_drop, cam_at, ra_clas
+Total predictions generated: 1400
+
+METHODOLOGY:
+----------------------------------------
+1. Loaded D-optimal experimental data (73 runs × 7 models = 511 observations)
+2. Fitted polynomial regression models for each model separately
+3. Generated prediction curves by varying each key factor while holding others constant
+4. Created comparative visualization plots for model robustness analysis
+
+KEY FINDINGS:
+----------------------------------------
+
+LID_POS:
+  Model sensitivity (NDS range across factor variation):
+    M_Base: Range = 0.1931, Mean = 0.2252
+    M_C_DO: Range = 0.1612, Mean = 0.1828
+    M_C_UP: Range = 0.1972, Mean = 0.2137
+    M_DRO: Range = 0.1675, Mean = 0.1960
+    M_GT: Range = 0.1372, Mean = 0.1610
+    M_K_DO: Range = 0.1573, Mean = 0.2107
+    M_K_UP: Range = 0.1737, Mean = 0.2051
+  Most sensitive model: M_C_UP
+  Least sensitive model: M_GT
+
+LID_DROP:
+  Model sensitivity (NDS range across factor variation):
+    M_Base: Range = 0.1678, Mean = 0.2187
+    M_C_DO: Range = 0.1374, Mean = 0.1776
+    M_C_UP: Range = 0.1636, Mean = 0.2096
+    M_DRO: Range = 0.1490, Mean = 0.1944
+    M_GT: Range = 0.0998, Mean = 0.1618
+    M_K_DO: Range = 0.1378, Mean = 0.2083
+    M_K_UP: Range = 0.1477, Mean = 0.2014
+  Most sensitive model: M_Base
+  Least sensitive model: M_GT
+
+CAM_AT:
+  Model sensitivity (NDS range across factor variation):
+    M_Base: Range = 0.0420, Mean = 0.2143
+    M_C_DO: Range = 0.0295, Mean = 0.1738
+    M_C_UP: Range = 0.0443, Mean = 0.2041
+    M_DRO: Range = 0.0473, Mean = 0.1906
+    M_GT: Range = 0.0317, Mean = 0.1584
+    M_K_DO: Range = 0.0245, Mean = 0.2050
+    M_K_UP: Range = 0.0273, Mean = 0.1979
+  Most sensitive model: M_DRO
+  Least sensitive model: M_K_DO
+
+RA_CLAS:
+  Model sensitivity (NDS range across factor variation):
+    M_Base: Range = 0.0080, Mean = 0.2212
+    M_C_DO: Range = 0.0114, Mean = 0.1814
+    M_C_UP: Range = 0.0095, Mean = 0.2126
+    M_DRO: Range = 0.0071, Mean = 0.1962
+    M_GT: Range = 0.0267, Mean = 0.1588
+    M_K_DO: Range = 0.0095, Mean = 0.2105
+    M_K_UP: Range = 0.0076, Mean = 0.2038
+  Most sensitive model: M_GT
+  Least sensitive model: M_DRO
+
+OUTPUT FILES:
+----------------------------------------
+  vergleich_plot_lid_pos.png
+  vergleich_plot_lid_drop.png
+  vergleich_plot_cam_at.png
+  vergleich_plot_ra_clas.png
+  analysis_summary.txt (this file)
+
+Analysis completed: 2025-09-03 10:20:24

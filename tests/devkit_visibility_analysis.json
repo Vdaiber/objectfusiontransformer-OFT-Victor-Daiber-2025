@@ -1,0 +1,21 @@
+{
+  "original_predictions": 31,
+  "corrected_camera_boxes": 31,
+  "visible_after_devkit_filter": 6,
+  "target_gt_boxes": 14,
+  "failure_breakdown": {
+    "depth_shallow": 11,
+    "depth_negative": 0,
+    "depth_visibility": 0,
+    "outside_image": 14,
+    "passed": 6
+  },
+  "gt_depth_range": [
+    3.862595182806879,
+    32.674641407150574
+  ],
+  "pred_depth_range": [
+    8.808655362603218,
+    26.75643262779763
+  ]
+}

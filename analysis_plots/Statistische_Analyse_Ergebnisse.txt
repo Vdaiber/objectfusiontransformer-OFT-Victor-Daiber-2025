@@ -1,0 +1,105 @@
+================================================================================
+STATISTISCHE ANALYSE - MIXED-EFFECTS LINEAR MODEL
+Experimentelle Daten: NDS Scores verschiedener Modelle
+================================================================================
+
+DATENSATZ INFORMATION:
+----------------------------------------
+Anzahl Beobachtungen: 511
+Anzahl Probanden (Nr): 73
+Anzahl Modelle: 7
+Modelle: M_Base, M_C_DO, M_C_UP, M_DRO, M_GT, M_K_DO, M_K_UP
+NDS Mittelwert: 0.257746
+NDS Standardabweichung: 0.110323
+NDS Bereich: 0.041987 - 0.611070
+
+MODELL SPEZIFIKATION:
+----------------------------------------
+Modelltyp: Mixed-Effects Linear Model
+Formel: NDS ~ C(Model_Name)
+Random Effects: Zufällige Intercepts für Nr (Probanden)
+Fixed Effects: Model_Name (kategoriale Variable)
+Methode: REML (Restricted Maximum Likelihood)
+
+VOLLSTÄNDIGE MODELL ZUSAMMENFASSUNG:
+----------------------------------------
+               Mixed Linear Model Regression Results
+===================================================================
+Model:                 MixedLM     Dependent Variable:     NDS     
+No. Observations:      511         Method:                 REML    
+No. Groups:            73          Scale:                  0.0009  
+Min. group size:       7           Log-Likelihood:         865.8408
+Max. group size:       7           Converged:              Yes     
+Mean group size:       7.0                                         
+-------------------------------------------------------------------
+                        Coef.  Std.Err.    z    P>|z| [0.025 0.975]
+-------------------------------------------------------------------
+Intercept                0.284    0.013  22.105 0.000  0.259  0.309
+C(Model_Name)[T.M_C_DO] -0.053    0.005 -10.345 0.000 -0.063 -0.043
+C(Model_Name)[T.M_C_UP] -0.006    0.005  -1.196 0.232 -0.016  0.004
+C(Model_Name)[T.M_DRO]  -0.035    0.005  -6.884 0.000 -0.045 -0.025
+C(Model_Name)[T.M_GT]   -0.029    0.005  -5.658 0.000 -0.039 -0.019
+C(Model_Name)[T.M_K_DO] -0.024    0.005  -4.732 0.000 -0.034 -0.014
+C(Model_Name)[T.M_K_UP] -0.036    0.005  -7.005 0.000 -0.046 -0.026
+Group Var                0.011    0.066                            
+===================================================================
+
+
+DETAILLIERTE ERGEBNISSE:
+----------------------------------------
+Referenzgruppe: M_Base
+
+Modell: M_C_DO
+  Koeffizient: -0.052622
+  P-Wert: 0.000000
+  95% Konfidenzintervall: [-0.062592, -0.042652]
+  Signifikant (α=0.05): Ja
+  Interpretation: M_C_DO unterscheidet sich signifikant von M_Base
+
+Modell: M_C_UP
+  Koeffizient: -0.006083
+  P-Wert: 0.231774
+  95% Konfidenzintervall: [-0.016053, 0.003887]
+  Signifikant (α=0.05): Nein
+  Interpretation: M_C_UP unterscheidet sich nicht signifikant von M_Base
+
+Modell: M_DRO
+  Koeffizient: -0.035017
+  P-Wert: 0.000000
+  95% Konfidenzintervall: [-0.044987, -0.025047]
+  Signifikant (α=0.05): Ja
+  Interpretation: M_DRO unterscheidet sich signifikant von M_Base
+
+Modell: M_GT
+  Koeffizient: -0.028779
+  P-Wert: 0.000000
+  95% Konfidenzintervall: [-0.038749, -0.018809]
+  Signifikant (α=0.05): Ja
+  Interpretation: M_GT unterscheidet sich signifikant von M_Base
+
+Modell: M_K_DO
+  Koeffizient: -0.024068
+  P-Wert: 0.000002
+  95% Konfidenzintervall: [-0.034038, -0.014098]
+  Signifikant (α=0.05): Ja
+  Interpretation: M_K_DO unterscheidet sich signifikant von M_Base
+
+Modell: M_K_UP
+  Koeffizient: -0.035636
+  P-Wert: 0.000000
+  95% Konfidenzintervall: [-0.045606, -0.025666]
+  Signifikant (α=0.05): Ja
+  Interpretation: M_K_UP unterscheidet sich signifikant von M_Base
+
+GESAMTTEST ERGEBNISSE:
+----------------------------------------
+Minimaler P-Wert: 0.000000
+Signifikante Unterschiede vorhanden: Ja
+
+WISSENSCHAFTLICHE SCHLUSSFOLGERUNG:
+----------------------------------------
+Es bestehen statistisch signifikante Unterschiede in den mittleren NDS-Scores zwischen den verschiedenen Model_Name Gruppen (p < 0.05), nach Kontrolle für die zufällige Variabilität der Probanden (Nr-Faktor).
+
+Signifikant unterschiedliche Modelle: M_C_DO, M_DRO, M_GT, M_K_DO, M_K_UP
+
+Analyse durchgeführt am: 2025-08-21 11:31:03
