@@ -1,0 +1,88 @@
+flowchart TD
+
+subgraph group_config["Experiment setup"]
+  node_configs["Hydra pipeline configs<br/>YAML configuration"]
+  node_dataset[("TruckScenes dataset<br/>mounted dataset")]
+end
+
+subgraph group_training["Training"]
+  node_training_entry["Training entry point<br/>Python runner"]
+  node_training_workflow["Training workflow<br/>training orchestration<br/>[train.py]"]
+  node_trainer["Autoregressive trainer<br/>epoch trainer"]
+  node_criterion["Set-prediction criterion<br/>detection losses"]
+  node_matcher["Hungarian matcher<br/>target assignment"]
+  node_checkpoints[("Checkpoints &amp; diagnostics<br/>training persistence")]
+end
+
+subgraph group_model["Staged fusion model"]
+  node_architecture["Autoregressive architecture<br/>sensor-fusion detector"]
+  node_modal_encoders["Intra-modal encoders<br/>sensor encoders"]
+  node_metadata_encoder["Metadata encoder<br/>scene conditioning"]
+  node_fusion["Inter-modal fusion<br/>transformer fusion"]
+  node_object_decoder["Object decoder<br/>set decoder<br/>[object_decoder.py]"]
+  node_normalization["Normalization &amp; geometry<br/>coordinate transforms"]
+end
+
+subgraph group_doe["DOE evaluation &amp; analysis"]
+  node_doe_plan["D-optimal DOE plan<br/>condition table<br/>[DOE_D_Optimal.csv]"]
+  node_preprocess["DOE preprocessing<br/>virtual-sensor preparation"]
+  node_sensor_cache[("Virtual sensor cache<br/>cached variants")]
+  node_doe_test["DOE model testing<br/>benchmark runner"]
+  node_evaluation["Devkit evaluation<br/>detection metrics"]
+  node_analysis["Statistical analysis<br/>DOE analysis"]
+end
+
+node_configs -->|"configures"| node_training_entry
+node_dataset -->|"sensor data &amp; targets"| node_normalization
+node_normalization -->|"prepared tensors"| node_training_workflow
+node_training_entry -->|"starts"| node_training_workflow
+node_training_workflow -->|"delegates epochs"| node_trainer
+node_trainer -->|"trains"| node_architecture
+node_architecture -->|"encodes modalities"| node_modal_encoders
+node_architecture -->|"conditions on scene"| node_metadata_encoder
+node_modal_encoders -->|"modality features"| node_fusion
+node_metadata_encoder -->|"additive metadata"| node_fusion
+node_fusion -->|"fused representations"| node_object_decoder
+node_object_decoder -->|"predicted objects"| node_criterion
+node_matcher -->|"matched targets"| node_criterion
+node_trainer -->|"assigns predictions"| node_matcher
+node_criterion -->|"optimization loss"| node_trainer
+node_trainer -->|"saves state &amp; diagnostics"| node_checkpoints
+node_doe_plan -->|"defines conditions"| node_preprocess
+node_preprocess -->|"materializes variants"| node_sensor_cache
+node_sensor_cache -->|"conditioned inputs"| node_doe_test
+node_checkpoints -->|"trained model variants"| node_doe_test
+node_doe_test -->|"predictions"| node_evaluation
+node_evaluation -->|"DOE metric tables"| node_analysis
+
+click node_configs "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/config/pipeline_staged.yaml"
+click node_training_entry "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/run_training_autoregressive.py"
+click node_training_workflow "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/training/train.py"
+click node_trainer "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/training/trainers/autoregressive_trainer.py"
+click node_criterion "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/training/criteria/autoregressive_criterion.py"
+click node_matcher "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/training/matchers/hungarian_matcher.py"
+click node_checkpoints "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/training/utils/checkpoint_utils.py"
+click node_architecture "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/models/architectures/autoregressive_architecture.py"
+click node_modal_encoders "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/models/components/encoders/intra_modal_encoder.py"
+click node_metadata_encoder "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/models/components/encoders/metadata_encoder.py"
+click node_fusion "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/models/components/inter_modal_fusion.py"
+click node_object_decoder "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/models/components/decoders/object_decoder.py"
+click node_normalization "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/utils/normalization_utils.py"
+click node_doe_plan "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/DOE_CSV/DOE_D_Optimal.csv"
+click node_preprocess "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/scripts/preprocess_doe_plan.py"
+click node_sensor_cache "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/utils/virtual_sensor_cache.py"
+click node_doe_test "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/scripts/test_model_on_doe.py"
+click node_evaluation "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/src/oft/transformer/evaluation/devkit_evaluator.py"
+click node_analysis "https://github.com/vdaiber/objectfusiontransformer-oft-victor-daiber-2025/blob/main/automatic_regression_analysis.py"
+
+classDef toneNeutral fill:#f8fafc,stroke:#334155,stroke-width:1.5px,color:#0f172a
+classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
+classDef toneAmber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+classDef toneMint fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
+classDef toneRose fill:#ffe4e6,stroke:#e11d48,stroke-width:1.5px,color:#881337
+classDef toneIndigo fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81
+classDef toneTeal fill:#ccfbf1,stroke:#0f766e,stroke-width:1.5px,color:#134e4a
+class node_configs,node_dataset toneBlue
+class node_training_entry,node_training_workflow,node_trainer,node_criterion,node_matcher,node_checkpoints toneAmber
+class node_architecture,node_modal_encoders,node_metadata_encoder,node_fusion,node_object_decoder,node_normalization toneMint
+class node_doe_plan,node_preprocess,node_sensor_cache,node_doe_test,node_evaluation,node_analysis toneRose
